@@ -1,0 +1,86 @@
+<div class="container mt-4">
+  <h2>{{ isEditMode ? 'Edit' : 'Report' }} Issue</h2>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <form [formGroup]="issueForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="equipment" class="form-label">Equipment</label>
+        <select class="form-select" id="equipment" formControlName="equipmentId">
+          <option value="">Select equipment</option>
+          <option *ngFor="let equipment of equipments" [value]="equipment.id">
+            {{ equipment.name }} ({{ equipment.serialNumber }})
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="issueForm.get('equipmentId')?.invalid && issueForm.get('equipmentId')?.touched">
+          Equipment is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="severity" class="form-label">Severity</label>
+        <select class="form-select" id="severity" formControlName="severity">
+          <option *ngFor="let level of severityLevels" [value]="level">
+            {{ level }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="issueForm.get('severity')?.invalid && issueForm.get('severity')?.touched">
+          Severity is required
+        </div>
+      </div>
+
+      <div class="col-12 mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" rows="3" formControlName="description"></textarea>
+        <div class="invalid-feedback" *ngIf="issueForm.get('description')?.invalid && issueForm.get('description')?.touched">
+          Description is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select class="form-select" id="status" formControlName="status">
+          <option *ngFor="let status of statusOptions" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="issueForm.get('status')?.invalid && issueForm.get('status')?.touched">
+          Status is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="technician" class="form-label">Assign Technician</label>
+        <select class="form-select" id="technician" formControlName="technicianId">
+          <option value="">Select technician</option>
+          <option *ngFor="let tech of technicians" [value]="tech.id">
+            {{ tech.firstName }} {{ tech.lastName }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-12 mb-3" *ngIf="issueForm.get('status')?.value === 'RESOLVED'">
+        <label for="resolution" class="form-label">Resolution</label>
+        <textarea class="form-control" id="resolution" rows="3" formControlName="resolution"></textarea>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary me-2" [disabled]="issueForm.invalid || loading">
+        {{ isEditMode ? 'Update' : 'Report' }} Issue
+      </button>
+      <button type="button" class="btn btn-secondary" routerLink="/issues">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div> 

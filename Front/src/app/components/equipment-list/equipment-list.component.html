@@ -1,0 +1,64 @@
+<div class="container mt-4">
+  <h2>Equipment List</h2>
+  
+  <div class="mb-3">
+    <button class="btn btn-primary" routerLink="/equipment/new">Add New Equipment</button>
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div class="table-responsive" *ngIf="!loading">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Serial Number</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Location</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let equipment of equipments">
+          <td>{{ equipment.name }}</td>
+          <td>{{ equipment.serialNumber }}</td>
+          <td>{{ equipment.type }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-success': equipment.status === 'OPERATIONAL',
+              'bg-warning': equipment.status === 'MAINTENANCE',
+              'bg-danger': equipment.status === 'OUT_OF_SERVICE'
+            }">
+              {{ equipment.status }}
+            </span>
+          </td>
+          <td>{{ equipment.location }}</td>
+          <td>
+            <button class="btn btn-sm btn-info me-2" [routerLink]="['/equipment', equipment.id]">
+              View
+            </button>
+            <button class="btn btn-sm btn-warning me-2" [routerLink]="['/equipment/edit', equipment.id]">
+              Edit
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteEquipment(equipment.id)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && equipments.length === 0" class="alert alert-info">
+    No equipment found.
+  </div>
+</div> 

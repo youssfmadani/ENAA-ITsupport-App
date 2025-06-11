@@ -1,0 +1,104 @@
+<div class="container mt-4">
+  <h2>{{ isEditMode ? 'Edit' : 'Add' }} Equipment</h2>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" formControlName="name">
+        <div class="invalid-feedback" *ngIf="equipmentForm.get('name')?.invalid && equipmentForm.get('name')?.touched">
+          Name is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="serialNumber" class="form-label">Serial Number</label>
+        <input type="text" class="form-control" id="serialNumber" formControlName="serialNumber">
+        <div class="invalid-feedback" *ngIf="equipmentForm.get('serialNumber')?.invalid && equipmentForm.get('serialNumber')?.touched">
+          Serial number is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="type" class="form-label">Type</label>
+        <select class="form-select" id="type" formControlName="type">
+          <option value="">Select type</option>
+          <option *ngFor="let type of equipmentTypes" [value]="type">
+            {{ type }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="equipmentForm.get('type')?.invalid && equipmentForm.get('type')?.touched">
+          Type is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select class="form-select" id="status" formControlName="status">
+          <option *ngFor="let status of equipmentStatuses" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="equipmentForm.get('status')?.invalid && equipmentForm.get('status')?.touched">
+          Status is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="purchaseDate" class="form-label">Purchase Date</label>
+        <input type="date" class="form-control" id="purchaseDate" formControlName="purchaseDate">
+        <div class="invalid-feedback" *ngIf="equipmentForm.get('purchaseDate')?.invalid && equipmentForm.get('purchaseDate')?.touched">
+          Purchase date is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="manufacturer" class="form-label">Manufacturer</label>
+        <input type="text" class="form-control" id="manufacturer" formControlName="manufacturer">
+        <div class="invalid-feedback" *ngIf="equipmentForm.get('manufacturer')?.invalid && equipmentForm.get('manufacturer')?.touched">
+          Manufacturer is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="model" class="form-label">Model</label>
+        <input type="text" class="form-control" id="model" formControlName="model">
+        <div class="invalid-feedback" *ngIf="equipmentForm.get('model')?.invalid && equipmentForm.get('model')?.touched">
+          Model is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" class="form-control" id="location" formControlName="location">
+        <div class="invalid-feedback" *ngIf="equipmentForm.get('location')?.invalid && equipmentForm.get('location')?.touched">
+          Location is required
+        </div>
+      </div>
+
+      <div class="col-12 mb-3">
+        <label for="notes" class="form-label">Notes</label>
+        <textarea class="form-control" id="notes" rows="3" formControlName="notes"></textarea>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary me-2" [disabled]="equipmentForm.invalid || loading">
+        {{ isEditMode ? 'Update' : 'Create' }} Equipment
+      </button>
+      <button type="button" class="btn btn-secondary" routerLink="/equipment">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div> 
