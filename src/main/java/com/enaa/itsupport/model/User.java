@@ -1,12 +1,15 @@
 package com.enaa.itsupport.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
     @Id
