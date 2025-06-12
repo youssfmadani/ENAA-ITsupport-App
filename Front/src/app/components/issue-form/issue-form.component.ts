@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { Issue } from '../../models/issue.model';
 import { Equipment } from '../../models/equipment.model';
 import { User } from '../../models/user.model';
@@ -11,7 +12,9 @@ import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-issue-form',
   templateUrl: './issue-form.component.html',
-  styleUrls: ['./issue-form.component.css']
+  styleUrls: ['./issue-form.component.css'],
+  imports: [CommonModule, ReactiveFormsModule],
+  standalone: true
 })
 export class IssueFormComponent implements OnInit {
   issueForm: FormGroup;

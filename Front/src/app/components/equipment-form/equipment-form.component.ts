@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { Equipment } from '../../models/equipment.model';
 import { EquipmentService } from '../../services/equipment.service';
 
 @Component({
   selector: 'app-equipment-form',
   templateUrl: './equipment-form.component.html',
-  styleUrls: ['./equipment-form.component.css']
+  styleUrls: ['./equipment-form.component.css'],
+  imports: [CommonModule, ReactiveFormsModule],
+  standalone: true
 })
 export class EquipmentFormComponent implements OnInit {
   equipmentForm: FormGroup;

@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Equipment } from '../../models/equipment.model';
 import { EquipmentService } from '../../services/equipment.service';
 
 @Component({
   selector: 'app-equipment-list',
   templateUrl: './equipment-list.component.html',
-  styleUrls: ['./equipment-list.component.css']
+  styleUrls: ['./equipment-list.component.css'],
+  imports: [CommonModule, RouterModule],
+  standalone: true
 })
 export class EquipmentListComponent implements OnInit {
   equipments: Equipment[] = [];
@@ -35,6 +39,8 @@ export class EquipmentListComponent implements OnInit {
   }
 
   deleteEquipment(id: number): void {
+    if (!id) return;
+    
     if (confirm('Are you sure you want to delete this equipment?')) {
       this.equipmentService.deleteEquipment(id)
         .subscribe({

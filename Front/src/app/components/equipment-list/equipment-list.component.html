@@ -49,7 +49,7 @@
             <button class="btn btn-sm btn-warning me-2" [routerLink]="['/equipment/edit', equipment.id]">
               Edit
             </button>
-            <button class="btn btn-sm btn-danger" (click)="deleteEquipment(equipment.id)">
+            <button class="btn btn-sm btn-danger" (click)="equipment.id && deleteEquipment(equipment.id)">
               Delete
             </button>
           </td>

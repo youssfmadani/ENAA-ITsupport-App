@@ -1,0 +1,11 @@
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.btn-submit {
+  margin-top: 1rem;
+}
+
+textarea {
+  min-height: 100px;
+} 

@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Issue } from '../../models/issue.model';
 import { IssueService } from '../../services/issue.service';
 
 @Component({
   selector: 'app-issue-list',
   templateUrl: './issue-list.component.html',
-  styleUrls: ['./issue-list.component.css']
+  styleUrls: ['./issue-list.component.css'],
+  imports: [CommonModule, RouterModule],
+  standalone: true
 })
 export class IssueListComponent implements OnInit {
   issues: Issue[] = [];
