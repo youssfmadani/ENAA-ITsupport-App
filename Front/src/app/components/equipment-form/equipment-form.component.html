@@ -33,9 +33,13 @@
         <label for="type" class="form-label">Type</label>
         <select class="form-select" id="type" formControlName="type">
           <option value="">Select type</option>
-          <option *ngFor="let type of equipmentTypes" [value]="type">
-            {{ type }}
-          </option>
+          <option value="COMPUTER">Computer</option>
+          <option value="LAPTOP">Laptop</option>
+          <option value="PRINTER">Printer</option>
+          <option value="SERVER">Server</option>
+          <option value="NETWORK_DEVICE">Network Device</option>
+          <option value="PERIPHERAL">Peripheral</option>
+          <option value="OTHER">Other</option>
         </select>
         <div class="invalid-feedback" *ngIf="equipmentForm.get('type')?.invalid && equipmentForm.get('type')?.touched">
           Type is required
@@ -45,9 +49,9 @@
       <div class="col-md-6 mb-3">
         <label for="status" class="form-label">Status</label>
         <select class="form-select" id="status" formControlName="status">
-          <option *ngFor="let status of equipmentStatuses" [value]="status">
-            {{ status }}
-          </option>
+          <option value="AVAILABLE">Available</option>
+          <option value="IN_USE">In Use</option>
+          <option value="MAINTENANCE">Maintenance</option>
         </select>
         <div class="invalid-feedback" *ngIf="equipmentForm.get('status')?.invalid && equipmentForm.get('status')?.touched">
           Status is required
@@ -93,10 +97,10 @@
     </div>
 
     <div class="mb-3">
-      <button type="submit" class="btn btn-primary me-2" [disabled]="equipmentForm.invalid || loading">
+      <button type="submit" class="btn btn-primary" [disabled]="equipmentForm.invalid">
         {{ isEditMode ? 'Update' : 'Create' }} Equipment
       </button>
-      <button type="button" class="btn btn-secondary" routerLink="/equipment">
+      <button type="button" class="btn btn-secondary ms-2" routerLink="/equipment">
         Cancel
       </button>
     </div>

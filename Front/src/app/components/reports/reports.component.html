@@ -1,0 +1,45 @@
+<div class="container mt-4">
+  <h2>Reports & Statistics</h2>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div class="row" *ngIf="!loading && !error">
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Equipment Overview</h5>
+        </div>
+        <div class="card-body">
+          <p class="card-text">Total Equipment: {{ reports.totalEquipment }}</p>
+          <div *ngFor="let status of reports.equipmentByStatus | keyvalue">
+            <p class="card-text">{{ status.key }}: {{ status.value }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Ticket Overview</h5>
+        </div>
+        <div class="card-body">
+          <p class="card-text">Total Tickets: {{ reports.totalTickets }}</p>
+          <p class="card-text">Open Tickets: {{ reports.openTickets }}</p>
+          <p class="card-text">Closed Tickets: {{ reports.closedTickets }}</p>
+          <div *ngFor="let priority of reports.ticketsByPriority | keyvalue">
+            <p class="card-text">{{ priority.key }}: {{ priority.value }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

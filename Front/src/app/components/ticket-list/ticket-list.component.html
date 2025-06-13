@@ -1,0 +1,74 @@
+<div class="container mt-4">
+  <h2>Support Tickets</h2>
+  
+  <div class="mb-3">
+    <button class="btn btn-primary" routerLink="/tickets/new">Create New Ticket</button>
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div class="table-responsive" *ngIf="!loading">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Equipment</th>
+          <th>Priority</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Assigned To</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ticket of tickets">
+          <td>{{ ticket.title }}</td>
+          <td>{{ ticket.equipment?.name }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-danger': ticket.priority === 'HIGH',
+              'bg-warning': ticket.priority === 'MEDIUM',
+              'bg-info': ticket.priority === 'LOW'
+            }">
+              {{ ticket.priority }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-success': ticket.status === 'RESOLVED',
+              'bg-warning': ticket.status === 'IN_PROGRESS',
+              'bg-danger': ticket.status === 'OPEN'
+            }">
+              {{ ticket.status }}
+            </span>
+          </td>
+          <td>{{ ticket.createdAt | date:'medium' }}</td>
+          <td>{{ ticket.assignedTechnician?.username || 'Unassigned' }}</td>
+          <td>
+            <button class="btn btn-sm btn-info me-2" [routerLink]="['/tickets', ticket.id]">
+              View
+            </button>
+            <button class="btn btn-sm btn-warning me-2" [routerLink]="['/tickets/edit', ticket.id]">
+              Edit
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="ticket.id && deleteTicket(ticket.id)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && tickets.length === 0" class="alert alert-info">
+    No tickets found.
+  </div>
+</div> 

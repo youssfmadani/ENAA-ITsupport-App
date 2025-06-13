@@ -1,22 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Equipment } from '../../models/equipment.model';
-import { EquipmentService } from '../../services/equipment.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-equipment-list',
-  templateUrl: './equipment-list.component.html',
-  styleUrls: ['./equipment-list.component.css'],
+  standalone: true,
   imports: [CommonModule, RouterModule],
-  standalone: true
+  templateUrl: './equipment-list.component.html',
+  styleUrls: ['./equipment-list.component.scss']
 })
 export class EquipmentListComponent implements OnInit {
-  equipments: Equipment[] = [];
+  equipments: any[] = [];
   loading = false;
-  error = '';
+  error: string | null = null;
 
-  constructor(private equipmentService: EquipmentService) { }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.loadEquipments();
@@ -24,32 +23,30 @@ export class EquipmentListComponent implements OnInit {
 
   loadEquipments(): void {
     this.loading = true;
-    this.equipmentService.getAllEquipment()
+    this.http.get<any[]>('http://localhost:8080/api/equipment')
       .subscribe({
         next: (data) => {
           this.equipments = data;
           this.loading = false;
         },
         error: (error) => {
-          this.error = 'Error loading equipment';
+          this.error = 'Failed to load equipment list';
           this.loading = false;
-          console.error('Error:', error);
+          console.error('Error loading equipment:', error);
         }
       });
   }
 
   deleteEquipment(id: number): void {
-    if (!id) return;
-    
     if (confirm('Are you sure you want to delete this equipment?')) {
-      this.equipmentService.deleteEquipment(id)
+      this.http.delete(`http://localhost:8080/api/equipment/${id}`)
         .subscribe({
           next: () => {
             this.equipments = this.equipments.filter(e => e.id !== id);
           },
           error: (error) => {
-            this.error = 'Error deleting equipment';
-            console.error('Error:', error);
+            this.error = 'Failed to delete equipment';
+            console.error('Error deleting equipment:', error);
           }
         });
     }

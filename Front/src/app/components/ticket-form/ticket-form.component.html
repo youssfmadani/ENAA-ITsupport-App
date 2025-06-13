@@ -1,0 +1,77 @@
+<div class="container mt-4">
+  <h2>{{ isEditMode ? 'Edit' : 'Create' }} Support Ticket</h2>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" formControlName="title">
+        <div class="invalid-feedback" *ngIf="ticketForm.get('title')?.invalid && ticketForm.get('title')?.touched">
+          Title is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="priority" class="form-label">Priority</label>
+        <select class="form-select" id="priority" formControlName="priority">
+          <option value="LOW">Low</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="HIGH">High</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="ticketForm.get('priority')?.invalid && ticketForm.get('priority')?.touched">
+          Priority is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="equipment" class="form-label">Equipment</label>
+        <select class="form-select" id="equipment" formControlName="equipmentId">
+          <option value="">Select equipment</option>
+          <option *ngFor="let equipment of equipments" [value]="equipment.id">
+            {{ equipment.name }} ({{ equipment.serialNumber }})
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="ticketForm.get('equipmentId')?.invalid && ticketForm.get('equipmentId')?.touched">
+          Equipment is required
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="technician" class="form-label">Assign to Technician</label>
+        <select class="form-select" id="technician" formControlName="assignedTechnicianId">
+          <option value="">Select technician</option>
+          <option *ngFor="let technician of technicians" [value]="technician.id">
+            {{ technician.firstName }} {{ technician.lastName }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-12 mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" rows="4" formControlName="description"></textarea>
+        <div class="invalid-feedback" *ngIf="ticketForm.get('description')?.invalid && ticketForm.get('description')?.touched">
+          Description is required
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary" [disabled]="ticketForm.invalid">
+        {{ isEditMode ? 'Update' : 'Create' }} Ticket
+      </button>
+      <button type="button" class="btn btn-secondary ms-2" routerLink="/tickets">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div> 

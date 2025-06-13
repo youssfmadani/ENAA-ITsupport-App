@@ -1,7 +1,6 @@
 <div class="container mt-4">
-  <h2>Equipment List</h2>
-  
-  <div class="mb-3">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Equipment List</h2>
     <button class="btn btn-primary" routerLink="/equipment/new">Add New Equipment</button>
   </div>
 
@@ -15,7 +14,7 @@
     {{ error }}
   </div>
 
-  <div class="table-responsive" *ngIf="!loading">
+  <div class="table-responsive" *ngIf="!loading && !error">
     <table class="table table-striped">
       <thead>
         <tr>
@@ -23,7 +22,6 @@
           <th>Serial Number</th>
           <th>Type</th>
           <th>Status</th>
-          <th>Location</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -34,22 +32,18 @@
           <td>{{ equipment.type }}</td>
           <td>
             <span class="badge" [ngClass]="{
-              'bg-success': equipment.status === 'OPERATIONAL',
-              'bg-warning': equipment.status === 'MAINTENANCE',
-              'bg-danger': equipment.status === 'OUT_OF_SERVICE'
+              'bg-success': equipment.status === 'AVAILABLE',
+              'bg-warning': equipment.status === 'IN_USE',
+              'bg-danger': equipment.status === 'MAINTENANCE'
             }">
               {{ equipment.status }}
             </span>
           </td>
-          <td>{{ equipment.location }}</td>
           <td>
-            <button class="btn btn-sm btn-info me-2" [routerLink]="['/equipment', equipment.id]">
-              View
-            </button>
-            <button class="btn btn-sm btn-warning me-2" [routerLink]="['/equipment/edit', equipment.id]">
+            <button class="btn btn-sm btn-primary me-2" [routerLink]="['/equipment/edit', equipment.id]">
               Edit
             </button>
-            <button class="btn btn-sm btn-danger" (click)="equipment.id && deleteEquipment(equipment.id)">
+            <button class="btn btn-sm btn-danger" (click)="deleteEquipment(equipment.id)">
               Delete
             </button>
           </td>
