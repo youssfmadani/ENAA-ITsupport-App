@@ -1,56 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Equipment } from '../../models/equipment.model';
-import { EquipmentService } from '../../services/equipment.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-equipment-form',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './equipment-form.component.html',
-  styleUrls: ['./equipment-form.component.css'],
-  imports: [CommonModule, ReactiveFormsModule],
-  standalone: true
+  styleUrls: ['./equipment-form.component.scss']
 })
 export class EquipmentFormComponent implements OnInit {
   equipmentForm: FormGroup;
   isEditMode = false;
-  equipmentId: number | null = null;
   loading = false;
-  error = '';
-
-  equipmentTypes = [
-    'COMPUTER',
-    'LAPTOP',
-    'PRINTER',
-    'SERVER',
-    'NETWORK_DEVICE',
-    'PERIPHERAL',
-    'OTHER'
-  ];
-
-  equipmentStatuses = [
-    'OPERATIONAL',
-    'MAINTENANCE',
-    'OUT_OF_SERVICE'
-  ];
+  error: string | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private equipmentService: EquipmentService,
-    private router: Router,
-    private route: ActivatedRoute
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.equipmentForm = this.fb.group({
       name: ['', Validators.required],
       serialNumber: ['', Validators.required],
       type: ['', Validators.required],
-      status: ['OPERATIONAL', Validators.required],
-      purchaseDate: ['', Validators.required],
-      manufacturer: ['', Validators.required],
-      model: ['', Validators.required],
-      location: ['', Validators.required],
-      notes: ['']
+      status: ['AVAILABLE', Validators.required]
     });
   }
 
@@ -58,49 +35,59 @@ export class EquipmentFormComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode = true;
-      this.equipmentId = +id;
-      this.loadEquipment(this.equipmentId);
+      this.loadEquipment(id);
     }
   }
 
-  loadEquipment(id: number): void {
+  loadEquipment(id: string): void {
     this.loading = true;
-    this.equipmentService.getEquipmentById(id)
+    this.http.get<any>(`http://localhost:8080/api/equipment/${id}`)
       .subscribe({
-        next: (equipment) => {
-          this.equipmentForm.patchValue({
-            ...equipment,
-            purchaseDate: equipment.purchaseDate?.split('T')[0]
-          });
+        next: (data) => {
+          this.equipmentForm.patchValue(data);
           this.loading = false;
         },
         error: (error) => {
-          this.error = 'Error loading equipment';
+          this.error = 'Failed to load equipment';
           this.loading = false;
-          console.error('Error:', error);
+          console.error('Error loading equipment:', error);
         }
       });
   }
 
   onSubmit(): void {
-    if (this.equipmentForm.valid) {
-      this.loading = true;
-      const equipment: Equipment = this.equipmentForm.value;
+    if (this.equipmentForm.invalid) {
+      return;
+    }
 
-      const request = this.isEditMode && this.equipmentId
-        ? this.equipmentService.updateEquipment(this.equipmentId, equipment)
-        : this.equipmentService.createEquipment(equipment);
+    this.loading = true;
+    const equipment = this.equipmentForm.value;
 
-      request.subscribe({
-        next: () => {
-          this.router.navigate(['/equipment']);
-        },
-        error: (error) => {
-          this.error = 'Error saving equipment';
-          this.loading = false;
-          console.error('Error:', error);
-        }
-      });
+    if (this.isEditMode) {
+      const id = this.route.snapshot.paramMap.get('id');
+      this.http.put(`http://localhost:8080/api/equipment/${id}`, equipment)
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/equipment']);
+          },
+          error: (error) => {
+            this.error = 'Failed to update equipment';
+            this.loading = false;
+            console.error('Error updating equipment:', error);
+          }
+        });
+    } else {
+      this.http.post('http://localhost:8080/api/equipment', equipment)
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/equipment']);
+          },
+          error: (error) => {
+            this.error = 'Failed to create equipment';
+            this.loading = false;
+            console.error('Error creating equipment:', error);
+          }
+        });
     }
   }
 } 

@@ -1,13 +1,16 @@
 package com.enaa.itsupport.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Equipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

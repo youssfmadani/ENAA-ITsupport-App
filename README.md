@@ -82,6 +82,15 @@ Représente les entités principales du système, leurs attributs, méthodes et 
 ### 3. 🔄 Diagramme de Séquence
 Décrit le déroulement d’un scénario spécifique, comme la création et le traitement d’un ticket de support.
 
+#### 3.1 
+![image](https://github.com/user-attachments/assets/1b7d798c-f1f8-41bd-a791-57475c949416)
+
+#### 3.2
+![image](https://github.com/user-attachments/assets/4c5dfbc0-22fa-4dee-b9d2-be5f6221c79f)
+
+
+#### 3.3
+![image](https://github.com/user-attachments/assets/23f1d538-4b66-4685-a745-70987e48785a)
 
 
 ---
