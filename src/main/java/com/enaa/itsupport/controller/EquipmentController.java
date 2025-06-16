@@ -28,7 +28,7 @@ public class EquipmentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/ajouterEquipment")
     public Equipment createEquipment(@RequestBody Equipment equipment) {
         return equipmentService.createEquipment(equipment);
     }
